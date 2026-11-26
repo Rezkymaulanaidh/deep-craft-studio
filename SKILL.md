@@ -32,7 +32,7 @@ Run this skill when **at least two** are true:
 | **Hard gate** | Graded or published work, legal/financial/medical claims, irreversible artifacts, user says "final" | Cannot declare done. Fix loop required. Residual defects reported. |
 | **Advisory** | Internal draft, exploration, time-boxed request | Score and disclose. The user decides whether to accept. |
 
-Advisory mode needs an explicit signal: the user says the output is internal or exploratory, or consents to skipping the gate. Agent uncertainty is not a signal. When the user is unreachable and the artifact is external-facing, default to hard gate and disclose that assumption in the contract.
+Advisory mode needs an explicit signal: the user says the output is internal or exploratory, or consents to skipping the gate. Agent uncertainty is not a signal. When the user is unreachable and the artifact is external-facing, default to hard gate and disclose that assumption in the contract. If the user stays unreachable, follow section 5 for claims that need private access: cut them or downgrade them to a stated A, and record the change in Limitations.
 
 ## 2. The loop
 
@@ -45,6 +45,8 @@ Five phases, each with an artifact. Skipping a phase is a decision you must stat
 | 3. Verify | Is each material claim true, current, and actually supported? | Verification notes plus confidence labels |
 | 4. Build | What is the craft minimum for this domain? | The deliverable |
 | 5. Audit | Does it pass the rubric, and what is still broken? | Filled scorecard (`assets/scorecard.md`) plus output contract |
+
+Working copies of `assets/evidence-table.md` and `assets/scorecard.md` go in a system temp directory such as `/tmp/deep-craft-*`. Delete them before you finish. Never overwrite the templates in `assets/`, and leave no scratch files in the user's project root.
 
 Load reference files only when you reach their phase. The map is at the end.
 
@@ -68,6 +70,7 @@ Read `references/research.md` before the first search. Minimum output is an evid
 Non-negotiables:
 - Primary sources before commentary about them.
 - Two independent sources for every material claim, at least one from tier S1 or S2.
+- Exception for Code: API and library behavior needs one primary source (the docs for the installed version) and a real execution result from a test or snippet. Skip the second source and the adversarial search for that claim.
 - One adversarial search per contested claim: look for the strongest disconfirming evidence.
 - Gaps are limited, not a default: the cap and escalation rule are in `references/research.md`.
 - Stop on coverage, saturation, or budget. A settled feeling is not a stop condition.
@@ -90,7 +93,7 @@ Anything that cannot be verified gets a label, not a confident sentence:
 - **V** verified: two independent sources, at least one S1/S2, locator recorded.
 - **S** single-source: one credible source, no corroboration.
 - **A** assumption: stated inference, not evidence.
-- **U** unverified: could not confirm. In hard mode a material claim cannot stay U; escalate, cut it, or downgrade the claim. In advisory mode it ships only if named in the contract.
+- **U** unverified: could not confirm. In hard mode a material claim cannot stay U. If the user is reachable, escalate. If the user is unreachable and the source needs private or paywalled access, cut the claim or downgrade it to a stated A with narrower scope. In advisory mode it ships only if named in the contract.
 
 These labels are defined here once. Other files refer to this section.
 
@@ -133,7 +136,7 @@ Hard fails, independent of score. Any one blocks completion:
 - Placeholder text, TODO, or lorem ipsum in the deliverable.
 - A material claim labeled U in hard mode, or any known limitation hidden from the reader.
 
-Hard mode adds one independent check: re-verify three randomly chosen material claims from their sources, without consulting your own notes. A failed spot check reopens the audit.
+Hard mode adds one independent check: re-verify three material claims (prioritizing numbers, citations, and API behaviors) by executing fresh tool calls (re-opening the file, re-running the snippet, or re-fetching the source URL) to confirm the deliverable matches the raw source. A failed spot check reopens the audit.
 
 If the gate fails, run `references/iteration.md`: fix blockers first, re-audit, maximum two rounds. Never raise a score to close a gap. If defects remain after two rounds, report them.
 
@@ -143,7 +146,7 @@ Every deliverable ends with these four blocks. Keep them short; they are not an 
 
 ```
 Assumptions: what was inferred, and what would change if wrong.
-Verification: V/S/A/U summary for material claims. List U items explicitly.
+Verification: V/S/A/U summary for material claims. List any A assumptions and (in advisory mode) U items explicitly.
 Limitations: what this does not cover, and why it matters.
 Next check: the single most useful verification the reader should run.
 ```
