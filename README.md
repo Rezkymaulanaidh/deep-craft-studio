@@ -45,7 +45,7 @@ Requires an agent that loads `SKILL.md` skills. The CLI method needs Node.js 22.
 npx skills add Rezkymaulanaidh/deep-craft-studio
 ```
 
-Add `-g` to install for every project, or `-a claude-code -a opencode` to target specific agents. This repository is private, so the CLI method needs repository access. Without access, use the manual method below.
+Add `-g` to install for every project, or `-a claude-code -a opencode` to target specific agents.
 
 ### Manual
 

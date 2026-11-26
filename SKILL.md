@@ -96,7 +96,7 @@ These labels are defined here once. Other files refer to this section.
 
 ## 6. Phase 4 - Build
 
-Read the domain module before drafting. Each defines the craft minimum for its artifact, not just a format.
+Read the domain module before drafting. It defines the craft minimum for that artifact.
 
 | Domain | Module | Craft minimum in one line |
 |---|---|---|
