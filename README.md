@@ -1,219 +1,90 @@
 # Deep Craft Studio
 
-A quality-gated workflow for deliverables that will be judged, published, sent, or shipped. It replaces good intentions ("be thorough", "avoid slop") with gates that can fail, evidence that can be inspected, and a contract the reader can check.
+An agent skill for work that will be judged: research papers, reports, articles, slide decks, spreadsheets, multi-file code, and data analysis. It turns "be thorough" into checks that can fail.
 
-Deep Craft Studio is an agent skill. It activates on medium-to-high-stakes work: research papers, reports, articles, slide decks, spreadsheets, multi-file code, and data analysis. It stays dormant for quick answers, single-line edits, lookups, and mechanical refactors.
+Deep Craft Studio follows the Agent Skills format, so one folder works in Claude Code, OpenCode, Codex, and Cursor.
 
-## Why it exists
+## What it adds
 
-Most "be thorough" advice is uncheckable. A model says it was thorough, the reviewer cannot tell, and the defect ships anyway. Deep Craft Studio turns quality into artifacts you can inspect:
+| Artifact | Purpose |
+|---|---|
+| Brief | Defines the audience, success criteria, constraints, unknowns, and failure modes before work starts |
+| Evidence table | One row per material claim: source, tier, date, and whether the source supports the sentence |
+| Confidence labels | V (verified), S (single source), A (assumption), U (unverified) on material claims |
+| Scorecard | Five dimensions scored 0 to 2, with a gate at 8/10 and no zero |
+| Fix loop | Blockers first, two rounds maximum, with regression checks |
+| Output contract | Assumptions, verification summary, limitations, next check |
 
-- A brief that defines "good" before any searching or drafting.
-- An evidence table where every material claim has a source, tier, date, and a "does it actually support the sentence?" check.
-- Verification notes with V / S / A / U confidence labels per claim.
-- A scored rubric with hard fails that block completion.
-- A bounded fix loop with a maximum of two rounds.
-- An output contract that states assumptions, verification status, limitations, and the next check.
+## Activation
 
-## Activation gate
+The skill runs when at least two of these hold:
 
-Run the skill when at least two of these hold:
-
-- An external audience will judge the output (grader, client, reviewer, production users).
-- Material claims need evidence outside common knowledge (facts, numbers, citations, API behavior).
+- An external audience will judge the output.
+- Material claims need evidence outside common knowledge.
 - The artifact is expensive to reverse: published, sent, deployed, or graded.
-- Scope exceeds one file or roughly 30 minutes of non-mechanical work.
+- Scope exceeds one file or about 30 minutes of non-mechanical work.
 
-Exclusions override the gate. Do not run it for quick factual answers, single-line edits, formatting-only changes, lookups, brainstorming, or mechanical refactors with a passing test suite. If the task is borderline, run Phase 1 and Phase 5 in light mode only.
+Exclusions override the gate: quick factual answers, single-line edits, formatting changes, lookups, brainstorming, and mechanical refactors with a passing test suite. A borderline task gets Phase 1 and Phase 5 in light mode only.
 
-Strictness mode is decided before work starts:
+Mode is chosen before work starts:
 
-| Mode | Use when | Consequence of a failed gate |
+| Mode | Use when | If the gate fails |
 |---|---|---|
-| Hard gate | Graded or published work, legal/financial/medical claims, irreversible artifacts, user says "final" | Cannot declare done. Fix loop required. Residual defects reported. |
-| Advisory | Internal draft, exploration, time-boxed request | Score and disclose. The user decides whether to accept. |
+| Hard gate | Graded or published work, legal, financial, or medical claims, irreversible artifacts, the user says "final" | Cannot declare done; fix loop required; residual defects reported |
+| Advisory | Internal draft, exploration, time-boxed request | Score and disclose; the user decides |
 
-Advisory mode needs an explicit signal. Agent uncertainty is not a signal. When the user is unreachable and the artifact is external-facing, default to hard gate and disclose that assumption in the contract.
+Advisory mode needs an explicit signal from the user. Agent uncertainty does not count.
 
-## The loop
+## Install
 
-Five phases, each with an artifact. Skipping a phase is a decision you state out loud.
+Requires an agent that loads `SKILL.md` skills. The CLI method needs Node.js 22.20 or later.
+
+### Skills CLI
+
+```bash
+npx skills add Rezkymaulanaidh/deep-craft-studio
+```
+
+Add `-g` to install for every project, or `-a claude-code -a opencode` to target specific agents. This repository is private, so the CLI method needs repository access. Without access, use the manual method below.
+
+### Manual
+
+Clone the repository, then copy the folder into a path your agent reads.
+
+```bash
+git clone https://github.com/Rezkymaulanaidh/deep-craft-studio.git
+```
+
+| Agent | Project scope | User scope |
+|---|---|---|
+| Claude Code | `.claude/skills/deep-craft-studio/` | `~/.claude/skills/deep-craft-studio/` |
+| OpenCode | `.opencode/skills/deep-craft-studio/` | `~/.config/opencode/skills/deep-craft-studio/` |
+| Codex | `.codex/skills/deep-craft-studio/` or `.agents/skills/deep-craft-studio/` | `~/.codex/skills/deep-craft-studio/` or `~/.agents/skills/deep-craft-studio/` |
+| Cursor | `.cursor/skills/deep-craft-studio/` or `.agents/skills/deep-craft-studio/` | `~/.cursor/skills/deep-craft-studio/` or `~/.agents/skills/deep-craft-studio/` |
+
+Restart the agent after copying if the skill does not appear.
+
+## How it runs
+
+Five phases, each with an artifact:
 
 | Phase | Question | Artifact |
 |---|---|---|
-| 1. Scope | What does "good" mean here, and what would make it fail? | Brief: audience, success criteria, constraints, unknowns |
+| 1. Scope | What does "good" mean here, and what would make it fail? | Brief: audience, success criteria, constraints, unknowns, failure modes, mode |
 | 2. Research | What do we need to know, and where is it? | Evidence table (`assets/evidence-table.md`) |
-| 3. Verify | Is each material claim true, current, and actually supported? | Verification notes plus confidence labels |
+| 3. Verify | Is each material claim true, current, and actually supported? | Verification notes with confidence labels |
 | 4. Build | What is the craft minimum for this domain? | The deliverable |
 | 5. Audit | Does it pass the rubric, and what is still broken? | Filled scorecard (`assets/scorecard.md`) plus output contract |
 
-Load reference files only when you reach their phase. The map is at the end of `SKILL.md`.
+Load reference files only when a phase needs them. `SKILL.md` holds the full workflow and the reference map.
 
-## Phase 1 - Scope
+## What counts as done
 
-Write the brief before searching or drafting. Six lines:
+Five dimensions, scored 0 to 2: accuracy, completeness, domain craft, structure, and traceability. The gate requires no zero and a total of at least 8 out of 10.
 
-1. Audience, and what they will do with the output.
-2. Success criteria in checkable terms (for example, "15 pages, 20 resolvable sources, method reproducible from the text alone").
-3. Constraints: format, length, deadline, template, tools, language.
-4. Known unknowns: what you would have to guess.
-5. Task-specific failure modes: what would make a reviewer reject this.
-6. Mode: hard or advisory, with the signal that set it.
+Eight hard fails block completion regardless of score. They include an unresolvable citation, a number with no source, an API that does not exist in the claimed version, a broken file or line reference, a generated file that will not open, an unmet requirement, placeholder text, and a material claim left unverified in hard mode. Hard mode also re-verifies three random claims from their sources.
 
-If success criteria are vague and the user is reachable, ask up to three questions. If not reachable, state assumptions and proceed; they belong in the output contract.
-
-## Phase 2 - Research
-
-Read `references/research.md` before the first search. Minimum output is an evidence table where every material claim has a row: source, tier, date, and whether the source actually supports it.
-
-Non-negotiables:
-
-- Primary sources before commentary about them.
-- Two independent sources for every material claim, at least one from tier S1 or S2.
-- One adversarial search per contested claim: look for the strongest disconfirming evidence.
-- Gaps are limited, not a default: the cap and escalation rule are in `references/research.md`.
-- Stop on coverage, saturation, or budget. A settled feeling is not a stop condition.
-
-Source tiers:
-
-| Tier | Definition | Examples |
-|---|---|---|
-| S1 | Primary or authoritative: produced by the source of the fact | Peer-reviewed papers, standards (ISO, W3C, RFC), official docs, source code, regulatory filings, raw datasets, court records, an organization's own audited report |
-| S2 | Credible secondary: interprets or reports S1 with a named method and accountability | Systematic reviews, government statistics portals, outlets with a corrections policy, a vendor's engineering blog about its own product |
-| S3 | Weak or derivative: useful as a lead, never as sole support | Wikipedia, aggregators, SEO listicles, conference marketing pages, forum answers, LLM output, undated blog posts |
-
-A claim needs two independent sources, at least one S1 or S2. Independence means a different origin, not two articles citing the same press release.
-
-## Phase 3 - Verify
-
-Read `references/verification.md`. Verify by claim type, not by vibe:
-
-| Claim type | Check |
-|---|---|
-| Citation | Resolve the identifier. Confirm title, authors, year, and that the passage supports the claim. |
-| Statistic | Trace to the dataset. Record reference period, sample size, unit. |
-| API or code behavior | Check the version actually installed, then the docs for that version, then run it. |
-| Benchmark | Conditions, baseline parity, eval harness. No cross-paper comparisons without matched settings. |
-| Quote | Locate the exact passage. No paraphrase inside quotation marks. |
-| File, line, or figure reference | Open it and confirm the content matches the claim. |
-
-Anything that cannot be verified gets a label, not a confident sentence:
-
-- **V** verified: two independent sources, at least one S1/S2, locator recorded.
-- **S** single-source: one credible source, no corroboration.
-- **A** assumption: stated inference, not evidence.
-- **U** unverified: could not confirm. In hard mode a material claim cannot stay U; escalate, cut it, or downgrade the claim. In advisory mode it ships only if named in the contract.
-
-These labels are defined here once. Other files refer to this section.
-
-## Phase 4 - Build
-
-Read the domain module before drafting. Each defines the craft minimum for its artifact, not just a format.
-
-| Domain | Module | Craft minimum in one line |
-|---|---|---|
-| Papers, reports, articles | `references/domains/academic.md` | Every section advances one claim; methods reproducible from text alone. |
-| Slide decks | `references/domains/slides.md` | One takeaway per slide, headline states the claim, detail lives in notes. |
-| Spreadsheets | `references/domains/spreadsheet.md` | Inputs, formulas, and outputs are separated; every total is traceable to cells. |
-| Code | `references/domains/code.md` | Runs from a clean checkout, failure paths handled, no speculative abstraction. |
-| Data analysis | `references/domains/analysis.md` | Provenance, method, and uncertainty stated before conclusions. |
-
-Prose rules apply in every domain: `references/anti-slop.md`. Its tests are behavioral (relocation, mechanism, deletion, number), not a phrase blacklist.
-
-## Phase 5 - Audit
-
-Score with `assets/scorecard.md`. Five dimensions, 0 to 2 each.
-
-| Dimension | 0 | 1 | 2 |
-|---|---|---|---|
-| Accuracy | A material claim is wrong or unsupported | Mostly correct, one weak claim | Every material claim verified or explicitly labeled and disclosed |
-| Completeness | A stated requirement is missing | All requirements met, depth uneven | All stated requirements met, and the deliverable states which adjacent needs were deliberately excluded |
-| Domain craft | Below the module's minimum | Meets format, misses substance | Meets the module's craft minimum, with evidence |
-| Structure | Reader cannot follow the argument | Followable, weak transitions | Every section advances the argument, and transitions state why the next section follows |
-| Traceability | Claims cannot be checked | Some sources, inconsistent | Every material claim traceable to evidence |
-
-Gate: no dimension scores 0, and the total is at least 8 out of 10.
-
-Hard fails, independent of score. Any one blocks completion:
-
-- A citation that cannot be resolved, or that does not support the claim.
-- A number with no source, or a source that does not support it.
-- An API, function, or flag that does not exist in the claimed version.
-- A file, line, or figure reference that does not exist or does not match.
-- A generated file that will not open, or leftover temporary artifacts.
-- An explicit user requirement not met.
-- Placeholder text, TODO, or lorem ipsum in the deliverable.
-- A material claim labeled U in hard mode, or any known limitation hidden from the reader.
-
-Hard mode adds one independent check: re-verify three randomly chosen material claims from their sources, without consulting your own notes. A failed spot check reopens the audit.
-
-If the gate fails, run `references/iteration.md`: fix blockers first, re-audit, maximum two rounds. Never raise a score to close a gap. If defects remain after two rounds, report them.
-
-## Output contract
-
-Every deliverable ends with these four blocks. Keep them short; they are not an essay.
-
-```
-Assumptions: what was inferred, and what would change if wrong.
-Verification: V/S/A/U summary for material claims. List U items explicitly.
-Limitations: what this does not cover, and why it matters.
-Next check: the single most useful verification the reader should run.
-```
-
-For inline work, label only material claims. Labeling every sentence is noise.
-
-## Installation
-
-Deep Craft Studio is a skill folder. Install it where your agent reads skills.
-
-### Claude Code
-
-Place the folder in one of these locations:
-
-- Project scope: `.claude/skills/deep-craft-studio/`
-- User scope: `~/.claude/skills/deep-craft-studio/`
-
-Then invoke it by name or let the activation gate trigger it.
-
-### OpenCode
-
-Place the folder in one of these locations:
-
-- Project scope: `.opencode/skills/deep-craft-studio/`
-- User scope: `~/.config/opencode/skills/deep-craft-studio/`
-
-OpenCode loads skills from these directories automatically.
-
-### Codex
-
-Place the folder in one of these locations:
-
-- Project scope: `.codex/skills/deep-craft-studio/`
-- User scope: `~/.codex/skills/deep-craft-studio/`
-
-### Cursor
-
-Place the folder in:
-
-- Project scope: `.cursor/skills/deep-craft-studio/`
-
-### Generic (clone)
-
-```bash
-git clone https://github.com/<owner>/deep-craft-studio.git
-```
-
-Then point your agent's skill loader at the cloned folder, or copy it into the agent's skill directory.
-
-### Via the skills CLI
-
-If the repository is public, you can install with:
-
-```bash
-npx skills add <owner>/deep-craft-studio@deep-craft-studio
-```
-
-Because this repository is private by default, use the clone method above or grant access first.
+If the gate fails, `references/iteration.md` fixes blockers first and allows two rounds. Scores are never raised to close a gap.
 
 ## Repository layout
 
@@ -221,11 +92,12 @@ Because this repository is private by default, use the clone method above or gra
 deep-craft-studio/
   SKILL.md                      # entry point and reference map
   README.md                     # this file
-  LICENSE                       # usage terms
+  LICENSE                       # CC BY-NC-SA 4.0
+  scripts/validate.py           # frontmatter, naming, and link checks
   references/
-    research.md                 # research method
-    verification.md             # verification by claim type
-    anti-slop.md                # prose quality tests
+    research.md                 # source tiers, query ladder, stopping rule
+    verification.md             # checks by claim type
+    anti-slop.md                # behavioral prose tests
     iteration.md                # defect and fix loop
     domains/
       academic.md               # papers, reports, articles
@@ -234,44 +106,36 @@ deep-craft-studio/
       code.md                   # code
       analysis.md               # data analysis
   assets/
-    evidence-table.md           # template: one row per claim
-    scorecard.md                # template: 5-dimension scoring
+    evidence-table.md           # one row per claim
+    scorecard.md                # five-dimension scoring
 ```
 
-## How to use it
+## Limits
 
-1. Load the skill in your agent.
-2. Give the agent a judged deliverable task (paper, report, deck, spreadsheet, multi-file code, or analysis).
-3. The activation gate decides whether to run. If at least two conditions hold, the agent runs Phase 1 first and writes the brief.
-4. The agent proceeds through research, verification, build, and audit, producing the evidence table, verification labels, and scorecard.
-5. The deliverable ends with the output contract: assumptions, verification, limitations, next check.
+- The rubric is a judgment aid, not a measurement. Two reviewers can score the same artifact differently.
+- The skill reduces common failure modes. It does not make an agent an expert in your field.
+- Verification depends on access. Paywalled or offline sources may stay U, and hard mode will block or downgrade those claims.
+- The workflow costs time and tokens. Use advisory mode for drafts where speed matters.
+- There is no benchmark yet. The rules come from documented failure rates and inspection, not a controlled trial.
 
-If the task is borderline, the agent runs Phase 1 and Phase 5 in light mode only.
+## Validation
 
-## Reference map
+```bash
+python3 scripts/validate.py
+```
 
-| File | Load when |
-|---|---|
-| `references/research.md` | Phase 2, before the first search |
-| `references/verification.md` | Phase 3, and whenever a claim looks too convenient |
-| `references/anti-slop.md` | Phase 4, during drafting and the self-edit pass |
-| `references/iteration.md` | Phase 5, when the gate fails |
-| `references/domains/*.md` | Phase 4, once the artifact type is known |
-| `assets/evidence-table.md` | Phase 2 output |
-| `assets/scorecard.md` | Phase 5 output |
+The script checks frontmatter, the skill name and folder match, the description length, and every internal link. CI runs it on each push.
+
+## Contributing
+
+Contributions are welcome. Open an issue for a bug or a proposed change, or send a pull request for a focused fix. Keep each pull request to one change and state what it fixes.
+
+By contributing, you agree that your contribution is licensed under CC BY-NC-SA 4.0 and that maintainers may merge, update, and improve it. Your name and the change stay in the repository history. Before opening a pull request, run `python3 scripts/validate.py` and make sure it passes.
 
 ## License
 
-This project is released under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International license (CC BY-NC-ND 4.0). In plain terms:
-
-- You may take and use this skill for personal, educational, and reference purposes.
-- You must give credit to the original author.
-- You may not sell it or use it commercially.
-- You may not modify it or redistribute modified versions.
-- You may cite it as a reference in your own work.
-
-See `LICENSE` for the full terms.
+CC BY-NC-SA 4.0. You may share and adapt this work with attribution for non-commercial purposes. Adaptations must use the same license. See `LICENSE` for the full terms and the contributor clause.
 
 ## Author
 
-Rezkymaulanaidh (GitHub: Rezkymaulanaidh)
+Rezkymaulanaidh

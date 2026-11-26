@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Local agent installs
+.agents/
+.claude/
+.codex/
+.cursor/
+.opencode/
+
+# Local config
+.env
