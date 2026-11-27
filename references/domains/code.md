@@ -8,28 +8,28 @@ Applies to features, scripts, tools, and multi-file changes.
 - Entry point obvious: one command to build, one to run, one to test.
 - Failure paths handled: invalid input, empty result, timeout, permission, network failure.
 - No speculative abstraction. One use: inline. Two uses: a function. Three or more: a module.
-- No dead code, no commented-out blocks, no TODO in delivered paths.
-- Tests, or a reproducible check command, exist for the behavior that matters.
-- Versions pinned or stated. Examples match the version in use.
+- No dead code, commented-out blocks, or TODO in delivered paths.
+- Tests, or a reproducible check command, for the behavior that matters.
+- Versions pinned or stated; examples match the version in use.
 
 ## 2. Craft minimums
 
-- Names reveal intent. `retry_with_backoff` beats `handle2`.
+- Names reveal intent: `retry_with_backoff` beats `handle2`.
 - Functions do one thing at one level of abstraction.
 - Validate at boundaries: user input, network, files, environment. Trust internal calls.
-- Fail loudly. No silent `except: pass`, no default that hides a broken state.
-- Comments explain why, not what. If the what needs a comment, rename things.
+- Fail loudly: no silent `except: pass`, no default that hides a broken state.
+- Comments explain why, not what; if the what needs a comment, rename things.
 - Errors carry context: what was attempted, with what input, what to do next.
 - Configuration is explicit at the edge, not read from globals deep inside.
 
 ## 3. Verification
 
-1. Run it. A snippet that was never executed is a hypothesis.
-2. Run the tests, then exercise the failure cases manually if untested.
+1. Run it; a snippet never executed is a hypothesis.
+2. Run the tests, then exercise failure cases manually if untested.
 3. Check the API against the installed version, not memory.
-4. Check dependency changes: lockfile diff, new transitive packages, license. Confirm each new package exists in the registry and is the one intended; hallucinated and typosquatted names both install cleanly.
-5. Check secrets: nothing committed, nothing logged, nothing in error output.
-6. Read the diff. Every changed line should trace to the request. Unrelated changes are noise or accidents.
+4. Check dependency changes: lockfile diff, new transitive packages, license. Confirm each new package exists in the registry and is intended; hallucinated and typosquatted names both install cleanly.
+5. Check secrets: nothing committed, logged, or in error output.
+6. Read the diff; every changed line should trace to the request. Unrelated changes are noise or accidents.
 
 ## 4. Security basics
 
@@ -47,7 +47,7 @@ Applies to features, scripts, tools, and multi-file changes.
 - Swallowed exceptions.
 - Unverified API calls that compile but fail at runtime.
 - Dependency bloat for a one-line problem.
-- Tests that assert the implementation instead of the behavior.
+- Tests that assert the implementation instead of behavior.
 - Refactoring adjacent code the request did not touch.
 
 ## 6. Verification before delivery
