@@ -32,7 +32,7 @@ Run this skill when **at least two** are true:
 | **Hard gate** | Graded or published work, legal/financial/medical claims, irreversible artifacts, user says "final" | Cannot declare done. Fix loop required. Residual defects reported. |
 | **Advisory** | Internal draft, exploration, time-boxed request | Score and disclose. The user decides whether to accept. |
 
-Advisory mode needs an explicit signal: the user says the output is internal or exploratory, or consents to skipping the gate. Agent uncertainty is not a signal. When the user is unreachable and the artifact is external-facing, default to hard gate and disclose that assumption in the contract. If the user stays unreachable, follow section 5 for claims that need private access: cut them or downgrade them to a stated A, and record the change in Limitations.
+Advisory mode needs an explicit signal: the user says the output is internal or exploratory, or consents to skipping the gate. Agent uncertainty is not a signal. When the user is unreachable and the artifact is external-facing, default to hard gate and disclose that assumption in the contract. If the user stays unreachable, follow the labeling rules in section 5 for claims that need private access: cut them or downgrade them to a stated A, and record the change in Limitations.
 
 ## 2. The loop
 
@@ -46,7 +46,7 @@ Five phases, each with an artifact. Skipping a phase is a decision you must stat
 | 4. Build | What is the craft minimum for this domain? | The deliverable |
 | 5. Audit | Does it pass the rubric, and what is still broken? | Filled scorecard (`assets/scorecard.md`) plus output contract |
 
-Working copies of `assets/evidence-table.md` and `assets/scorecard.md` go in a system temp directory such as `/tmp/deep-craft-*`. Delete them before you finish. Never overwrite the templates in `assets/`, and leave no scratch files in the user's project root.
+Working copies of `assets/evidence-table.md` and `assets/scorecard.md` go in a system temp directory, for example `/tmp/deep-craft-*` on Unix or `%TEMP%\deep-craft-*` on Windows. Delete them before you finish. Never overwrite the templates in `assets/`, and leave no scratch files in the user's project root.
 
 Load reference files only when you reach their phase. The map is at the end.
 

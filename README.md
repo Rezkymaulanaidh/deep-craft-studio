@@ -59,7 +59,7 @@ git clone https://github.com/Rezkymaulanaidh/deep-craft-studio.git
 |---|---|---|
 | Claude Code | `.claude/skills/deep-craft-studio/` | `~/.claude/skills/deep-craft-studio/` |
 | OpenCode | `.opencode/skills/deep-craft-studio/` | `~/.config/opencode/skills/deep-craft-studio/` |
-| Codex | `.codex/skills/deep-craft-studio/` or `.agents/skills/deep-craft-studio/` | `~/.codex/skills/deep-craft-studio/` or `~/.agents/skills/deep-craft-studio/` |
+| Codex | `.agents/skills/deep-craft-studio/` | `~/.agents/skills/deep-craft-studio/` |
 | Cursor | `.cursor/skills/deep-craft-studio/` or `.agents/skills/deep-craft-studio/` | `~/.cursor/skills/deep-craft-studio/` or `~/.agents/skills/deep-craft-studio/` |
 
 Restart the agent after copying if the skill does not appear.
@@ -82,7 +82,7 @@ Load reference files only when a phase needs them. `SKILL.md` holds the full wor
 
 Five dimensions, scored 0 to 2: accuracy, completeness, domain craft, structure, and traceability. The gate requires no zero and a total of at least 8 out of 10.
 
-Eight hard fails block completion regardless of score. They include an unresolvable citation, a number with no source, an API that does not exist in the claimed version, a broken file or line reference, a generated file that will not open, an unmet requirement, placeholder text, and a material claim left unverified in hard mode. Hard mode also re-verifies three random claims from their sources.
+Eight hard fails block completion regardless of score. They include an unresolvable citation, a number with no source, an API that does not exist in the claimed version, a broken file or line reference, a generated file that will not open, an unmet requirement, placeholder text, and a material claim still labeled U in hard mode. Hard mode also re-verifies three material claims, prioritizing numbers, citations, and API behavior.
 
 If the gate fails, `references/iteration.md` fixes blockers first and allows two rounds. Scores are never raised to close a gap.
 
@@ -114,9 +114,9 @@ deep-craft-studio/
 
 - The rubric is a judgment aid, not a measurement. Two reviewers can score the same artifact differently.
 - The skill reduces common failure modes. It does not make an agent an expert in your field.
-- Verification depends on access. Paywalled or offline sources may stay U, and hard mode will block or downgrade those claims.
+- Verification depends on access. Paywalled or offline sources may stay U in advisory mode. Hard mode cuts them or downgrades them to a stated assumption.
 - The workflow costs time and tokens. Use advisory mode for drafts where speed matters.
-- There is no benchmark yet. The rules come from documented failure rates and inspection, not a controlled trial.
+- There is no benchmark yet. The rules come from documented failure modes and inspection, not a controlled trial.
 
 ## Validation
 
@@ -124,7 +124,7 @@ deep-craft-studio/
 python3 scripts/validate.py
 ```
 
-The script checks frontmatter, the skill name and folder match, the description length, and every internal link. CI runs it on each push.
+The script checks frontmatter, the skill name and folder match, the description length, and every internal reference link. CI runs it on each push.
 
 ## Contributing
 
