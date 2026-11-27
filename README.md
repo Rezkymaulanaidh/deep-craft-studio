@@ -93,6 +93,8 @@ deep-craft-studio/
   SKILL.md                      # entry point and reference map
   README.md                     # this file
   LICENSE                       # CC BY-NC-SA 4.0
+  .gitignore                    # local artifacts and agent installs
+  .github/workflows/validate.yml # CI: runs the validator
   scripts/validate.py           # frontmatter, naming, and link checks
   references/
     research.md                 # source tiers, query ladder, stopping rule
