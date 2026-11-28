@@ -52,7 +52,7 @@ class ValidateTests(unittest.TestCase):
             errors = validate.validate_repo(repo)
             self.assertTrue(any("missing required file: README.md" in e for e in errors))
 
-    def test_custom_license_preamble_fails(self) -> None:
+    def test_custom_license_header_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo = make_minimal_repo(Path(tmp))
             (repo / "LICENSE").write_text("Custom summary\n", encoding="utf-8")

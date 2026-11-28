@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 REQUIRED = ["SKILL.md", "README.md", "LICENSE"]
-CANONICAL_LICENSE_PREFIX = "Attribution-NonCommercial-ShareAlike 4.0 International"
+CANONICAL_LICENSE_PREFIX = "MIT License"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 BACKTICK_PATH_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|py|yml|yaml))`")
 MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
@@ -51,7 +51,7 @@ def parse_frontmatter(block: str) -> dict[str, str]:
 
 
 def check_license(root: Path, errors: list[str]) -> None:
-    """Verify LICENSE begins with the canonical CC BY-NC-SA 4.0 header."""
+    """Verify LICENSE begins with the canonical MIT License header."""
     path = root / "LICENSE"
     if not path.is_file():
         return

@@ -96,7 +96,7 @@ If the gate fails, `references/iteration.md` fixes blockers first and stops on p
 rezky-agent-skill/
   SKILL.md                       # entry point and reference map
   README.md                      # this file
-  LICENSE                        # CC BY-NC-SA 4.0
+  LICENSE                        # MIT License
   .gitignore                     # local artifacts and agent installs
   .github/workflows/validate.yml # CI: runs validator and unit tests
   scripts/validate.py            # frontmatter, naming, link, and parity checks
@@ -140,11 +140,15 @@ The validator checks `LICENSE`, frontmatter, the skill name and folder match, de
 
 Contributions are welcome. Open an issue for a bug or a proposed change, or send a pull request for a focused fix. Keep each pull request to one change and state what it fixes.
 
-By contributing, you agree that your contribution is licensed under CC BY-NC-SA 4.0 and that maintainers may merge, update, and improve it. Your name and the change stay in the repository history. Before opening a pull request, run `python3 scripts/validate.py` and `python3 -m unittest discover -s tests -v`.
+By contributing, you agree that your contribution is licensed under the MIT License and that maintainers may merge, update, and improve it. Your name and the change stay in the repository history. Before opening a pull request, run `python3 scripts/validate.py` and `python3 -m unittest discover -s tests -v`.
 
-## License
+## Disclosure & License
 
-CC BY-NC-SA 4.0. You may share and adapt this work with attribution for non-commercial purposes. Adaptations must use the same license. See `LICENSE` for the full terms and Contributing above for contributor terms.
+**Transparency (AI-assisted work):** This repository—including its rules, documentation, examples, and helper scripts—was designed, written, and refined with AI assistance, curated and directed by the repository owner (`Rezkymaulanaidh`).
+
+**License (MIT):** You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell this project for any purpose, **as long as you keep the original copyright notice and credit the author (`Rezkymaulanaidh`)**.
+
+**No warranty / no liability:** This project is provided **"as is"**, without warranty of any kind. You use and adapt it entirely at your own risk; the author and repository owner (`Rezkymaulanaidh`) is not responsible or liable for any damage, bugs, data loss, financial loss, or other consequences resulting from using or relying on these skills or scripts. See `LICENSE` for the full legal text.
 
 ## Author
 
