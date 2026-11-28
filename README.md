@@ -121,11 +121,11 @@ rezky-agent-skill/
 
 ## Limits and design tradeoffs
 
-- **Self-audit is not independent proof:** An LLM checking its own prose in the same context shares correlated errors. RAS mitigates this with deterministic tool checks first and verifier subagent delegation where available, but cannot eliminate model error when running single-agent without tools.
-- **Process is not substance:** Passing a checklist or filling an evidence table does not guarantee good judgment; `V` labels and `12/15` scores still require the reader to verify the `Next check` for high-stakes decisions.
-- **Paywalled S1 sources:** Never trade a paywalled S1 paper for a low-tier open blog just because it is crawlable. Hard mode retains verified metadata + publisher abstracts (`S`, scoped in `Limitations`) or escalates for access.
-- **Prompt budget and latency:** Loading references adds tokens and tool calls; batch-loading only the needed domain file and keeping `SKILL.md` light-mode capable minimizes overhead.
-- **Validation vs live LLM evals:** CI runs deterministic structural and parity tests (`scripts/validate.py`, `tests/test_validate.py`) with zero external API keys; behavioral LLM compliance cases live in `evals/` for local runs.
+- Self-audit is not independent proof. An LLM checking its own prose in the same context shares correlated errors. RAS mitigates this with deterministic tool checks first and verifier subagent delegation where available, but cannot eliminate model error when running single-agent without tools.
+- Process is not substance. Passing a checklist or filling an evidence table does not guarantee sound judgment; `V` labels and `12/15` scores still require the reader to verify the `Next check` for high-stakes decisions.
+- Paywalled S1 sources. Never trade a paywalled S1 paper for a low-tier open blog just because it is crawlable. Hard mode retains verified metadata and publisher abstracts (`S`, scoped in `Limitations`) or escalates for access.
+- Prompt budget and latency. Loading references adds tokens and tool calls; batch-loading only the needed domain file and keeping `SKILL.md` light-mode capable keeps overhead low.
+- Validation vs live LLM evals. CI runs deterministic structural and parity tests (`scripts/validate.py`, `tests/test_validate.py`) with zero external API keys; behavioral LLM compliance cases live in `evals/` for local runs.
 
 ## Validation
 
@@ -142,13 +142,13 @@ Contributions are welcome. Open an issue for a bug or a proposed change, or send
 
 By contributing, you agree that your contribution is licensed under the MIT License and that maintainers may merge, update, and improve it. Your name and the change stay in the repository history. Before opening a pull request, run `python3 scripts/validate.py` and `python3 -m unittest discover -s tests -v`.
 
-## Disclosure & License
+## Disclosure and license
 
-**Transparency (AI-assisted work):** This repository—including its rules, documentation, examples, and helper scripts—was designed, written, and refined with AI assistance, curated and directed by the repository owner (`Rezkymaulanaidh`).
+This repository (its rules, documentation, examples, and helper scripts) was designed, written, and refined with AI assistance under the direction of `Rezkymaulanaidh`.
 
-**License (MIT):** You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell this project for any purpose, **as long as you keep the original copyright notice and credit the author (`Rezkymaulanaidh`)**.
+It is licensed under the MIT License (`LICENSE`). You may use, copy, modify, merge, publish, distribute, sublicense, or sell it for any purpose, provided you keep the copyright notice and credit `Rezkymaulanaidh`.
 
-**No warranty / no liability:** This project is provided **"as is"**, without warranty of any kind. You use and adapt it entirely at your own risk; the author and repository owner (`Rezkymaulanaidh`) is not responsible or liable for any damage, bugs, data loss, financial loss, or other consequences resulting from using or relying on these skills or scripts. See `LICENSE` for the full legal text.
+The project is provided "as is", without warranty of any kind. You use and adapt it at your own risk; `Rezkymaulanaidh` is not liable for any bugs, data loss, financial loss, or other damage resulting from using these skills or scripts.
 
 ## Author
 

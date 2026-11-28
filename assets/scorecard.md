@@ -9,10 +9,10 @@ Date:
 
 ## Scale
 
-- **0 (Broken):** missing, broken, or contradicted by evidence (auto-fail).
-- **1 (Weak / Partial):** major gaps remain; fails craft or verification minimum.
-- **2 (Acceptable):** meets baseline requirements with minor or single-source gaps.
-- **3 (Strong / Verified):** thorough, verified with locators/tool output, meets full domain craft minimum.
+- 0 (Broken): missing, broken, or contradicted by evidence (auto-fail).
+- 1 (Weak / Partial): major gaps remain; fails craft or verification minimum.
+- 2 (Acceptable): meets baseline requirements with minor or single-source gaps.
+- 3 (Strong / Verified): thorough, verified with locators or tool output, meets full domain craft minimum.
 
 ## Dimensions
 

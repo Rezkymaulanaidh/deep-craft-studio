@@ -31,11 +31,11 @@ Rules:
 
 Run in order; stop when covered.
 
-1. **Definition:** pin terms and scope; ambiguity manufactures false disagreements.
-2. **Primary:** the producer—paper, docs, dataset, filing, changelog.
-3. **Corroboration:** an independent S2 reporting the same fact with its own method.
-4. **Adversarial:** the strongest counter-claim ("X criticism", "X replication failure", "X limitations", "why X is wrong"); read the best counter-argument, not the first.
-5. **Gap:** record it, label U, adjust the deliverable; do not pad with weaker sources.
+1. Definition: pin terms and scope; ambiguity manufactures false disagreements.
+2. Primary: the producer (paper, docs, dataset, filing, changelog).
+3. Corroboration: an independent S2 reporting the same fact with its own method.
+4. Adversarial: the strongest counter-claim ("X criticism", "X replication failure", "X limitations", "why X is wrong"); read the best counter-argument, not the first.
+5. Gap: record it, label U, adjust the deliverable; do not pad with weaker sources.
 
 ## 4. Recency
 
@@ -82,9 +82,9 @@ A settled feeling is not a stop condition; three null searches are.
 
 ## 8. Anti-patterns
 
-- **Citation shopping:** agreeing sources only.
-- **Authority laundering:** citing a blog that cites a paper without reading it.
-- **Single-source chain:** one origin, five reprints, counted as five.
-- **Recency theater:** newer assumed better without checking method.
-- **Scope creep:** interesting adjacent questions the deliverable does not need.
-- **Unbounded search:** no budget or saturation check; research becomes the deliverable.
+- Citation shopping: agreeing sources only.
+- Authority laundering: citing a blog that cites a paper without reading it.
+- Single-source chain: one origin, five reprints, counted as five.
+- Recency theater: newer assumed better without checking method.
+- Scope creep: interesting adjacent questions the deliverable does not need.
+- Unbounded search: no budget or saturation check; research becomes the deliverable.

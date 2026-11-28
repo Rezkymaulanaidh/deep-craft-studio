@@ -49,7 +49,7 @@ Five phases, each with an artifact. Skipping a phase is a decision you must stat
 
 Keep working copies (Brief, Evidence table, Scorecard) in a system temp directory (`/tmp/ras-*` on Unix, `%TEMP%\ras-*` on Windows), delete them before finishing, never overwrite the templates, and leave no scratch files in the project root. Present only the deliverable and the compact 4-line output contract to the user unless the full audit trail is requested.
 
-**Batch loading:** To avoid sequential round-trip latency and prompt dilution, load only what the active task needs in one parallel batch when Phase 2 starts (`references/research.md`, `references/verification.md`, and the single matching `references/domains/*.md`). Load `references/anti-slop.md` in Phase 4, and `references/iteration.md` only if Phase 5 fails.
+To avoid sequential round-trip latency and prompt dilution, load only what the active task needs in one parallel batch when Phase 2 starts (`references/research.md`, `references/verification.md`, and the single matching `references/domains/*.md`). Load `references/anti-slop.md` in Phase 4, and `references/iteration.md` only if Phase 5 fails.
 
 ## 3. Phase 1 - Scope
 
@@ -91,10 +91,10 @@ Read `references/verification.md`. Run deterministic checks first wherever tools
 
 Anything unverifiable gets a label, not a confident sentence:
 
-- **V** verified: two independent sources, >=1 S1/S2, locator recorded—and backed by observed tool/source output, never model recall alone.
+- **V** verified: two independent sources, >=1 S1/S2, locator recorded, and backed by observed tool or source output, never model recall alone.
 - **S** single-source: one credible source, no corroboration.
 - **A** assumption: stated inference, not evidence.
-- **U** unverified: unconfirmed. Hard: a material U cannot ship—escalate if reachable. If unreachable and a paywalled S1 source is blocked, never replace it with a weaker S3 blog: keep verified bibliographic metadata + publisher abstract (`[S1-abstract only]`, labeled **S** with scope limited in Limitations) when sufficient for a bounded claim, or cut/downgrade to a stated **A** if full-text proof is needed. Advisory: ships only if named in the contract.
+- **U** unverified: unconfirmed. Hard: a material U cannot ship; escalate if reachable. If unreachable and a paywalled S1 source is blocked, never replace it with a weaker S3 blog: keep verified bibliographic metadata plus publisher abstract (`[S1-abstract only]`, labeled **S** with scope limited in Limitations) when sufficient for a bounded claim, or cut or downgrade to a stated **A** if full-text proof is needed. Advisory: ships only if named in the contract.
 
 Defined here once; other files refer to this section.
 
@@ -114,7 +114,7 @@ Prose rules apply everywhere (`references/anti-slop.md`): behavioral tests (relo
 
 ## 7. Phase 5 - Audit
 
-**Break self-verification circularity:** When the runtime supports subagents or separate sessions, delegate Phase 5 Audit (and the Hard-mode spot check) to a fresh verifier agent given only the brief, deliverable, and raw sources—never the builder's notes. In single-agent runtimes, run deterministic checks first and re-read raw sources/command outputs fresh rather than grading from memory or earlier notes.
+When the runtime supports subagents or separate sessions, delegate Phase 5 Audit (and the Hard-mode spot check) to a fresh verifier agent given only the brief, deliverable, and raw sources, never the builder's notes. In single-agent runtimes, run deterministic checks first and re-read raw sources or command outputs fresh rather than grading from memory or earlier notes.
 
 Score with `assets/scorecard.md`. Five dimensions, 0-3 each:
 
@@ -139,7 +139,7 @@ Hard fails, independent of score. Any one blocks completion:
 - Placeholder, TODO, or lorem ipsum in the deliverable.
 - Material U claim in hard mode, or a hidden known limitation.
 
-Hard mode re-verifies three material claims (numbers, citations, API behavior) with fresh tool calls—reopen the file, rerun the snippet, or refetch the source—and confirms the deliverable matches the raw source. A failure reopens the audit.
+Hard mode re-verifies three material claims (numbers, citations, API behavior) with fresh tool calls (reopen the file, rerun the snippet, or refetch the source) and confirms the deliverable matches the raw source. A failure reopens the audit.
 
 On failure, run `references/iteration.md`: blockers first, progress-based stop rule (cap 3 rounds; stop on pass, zero net progress/oscillation, or missing access). Never raise a score to close a gap; report defects that remain.
 

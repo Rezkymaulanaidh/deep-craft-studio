@@ -1,6 +1,6 @@
 # Behavioral Evaluations (Local)
 
-`scripts/validate.py` and `tests/test_validate.py` verify structural and cross-file parity deterministically in CI without API keys. This folder holds adversarial **behavioral** cases (`cases.json`) to test whether an LLM agent actually follows `SKILL.md` in practice.
+`scripts/validate.py` and `tests/test_validate.py` verify structural and cross-file parity deterministically in CI without API keys. This folder holds adversarial behavioral cases (`cases.json`) to test whether an LLM agent follows `SKILL.md` in practice.
 
 ## Running locally
 
