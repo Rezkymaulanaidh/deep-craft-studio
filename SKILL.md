@@ -2,17 +2,18 @@
 name: rezky-agent-skill
 description: >-
   Quality-gated workflow for judged deliverables: papers, reports, articles, slides,
-  spreadsheets, multi-file code, and analysis. Adds an activation gate, source-tier
-  verification, domain craft minimums, a scored rubric with hard fails, a bounded fix loop,
-  and an output contract. Use when at least two hold: an external audience judges the output;
-  material claims need evidence beyond common knowledge; the artifact is expensive to reverse;
-  scope exceeds one file or ~30 minutes of non-mechanical work. Skip quick answers, single-line
-  edits, lookups, and mechanical refactors.
+  spreadsheets, multi-file code, and analysis. Adds an activation gate, source-tier and
+  deterministic verification, domain craft minimums, a 0-3 rubric with hard fails, a
+  progress-bounded fix loop, and an output contract. Use when at least two hold: an external
+  audience judges the output; material claims need evidence beyond common knowledge; the
+  artifact is expensive to reverse; scope spans multiple files, >100 lines of non-mechanical
+  output, or multi-step synthesis. Skip quick answers, single-line edits, lookups, and
+  mechanical refactors.
 ---
 
 # Rezky Agent Skill (RAS)
 
-For work that will be judged: gates that can fail, evidence that can be inspected, and a contract the reader can check.
+For work that will be judged: deterministic checks first, independent verification where possible, evidence that can be inspected, and a contract the reader can check.
 
 ## 1. Activation gate
 
@@ -21,18 +22,18 @@ Run RAS when **at least two** are true:
 - [ ] An external audience judges the output (grader, client, reviewer, users).
 - [ ] Material claims need evidence beyond common knowledge (facts, numbers, citations, APIs).
 - [ ] The artifact is expensive to reverse: published, sent, deployed, graded.
-- [ ] Scope exceeds one file or ~30 minutes of non-mechanical work.
+- [ ] Scope spans multiple files, >100 lines of non-mechanical output, or multi-step synthesis.
 
-**Exclusions override the gate.** Skip quick factual answers, single-line edits, formatting-only changes, lookups, brainstorming, and mechanical refactors with a passing test suite, even with two boxes checked. If borderline, run Phase 1 and Phase 5 in light mode only.
+**Exclusions override the gate.** Skip quick factual answers, single-line edits, formatting-only changes, lookups, brainstorming, and mechanical refactors with a passing test suite, even with two boxes checked. If borderline, run Phase 1 and Phase 5 directly from this file in light mode with zero extra reference reads.
 
 **Strictness mode**, chosen before work starts:
 
 | Mode | Use when | If the gate fails |
 |---|---|---|
-| **Hard gate** | Graded/published, legal/financial/medical, irreversible, user says "final" | Cannot declare done; fix loop; residual defects reported. |
-| **Advisory** | Internal draft, exploration, time-boxed | Score and disclose; user decides. |
+| **Hard gate** | External audience, graded/published/deployed, legal/financial/medical/security-critical, irreversible, or user says "final" | Cannot declare done; run fix loop; report residual defects. |
+| **Advisory** | Internal draft, exploration, or user signals "draft", "quick", "explore", or "advisory" | Score and disclose; user decides. |
 
-Advisory needs an explicit user signal (internal or exploratory output, or consent to skip the gate); agent uncertainty is not a signal. If the user is unreachable and the artifact is external-facing, default to hard gate and disclose the assumption. If still unreachable, follow section 5 for claims needing private access: cut them or downgrade to a stated A, and record the change in Limitations.
+If the user is unreachable and the deliverable is external-facing with ambiguous intent, default to Hard gate and disclose the assumption.
 
 ## 2. The loop
 
@@ -46,9 +47,9 @@ Five phases, each with an artifact. Skipping a phase is a decision you must stat
 | 4. Build | What is the craft minimum? | The deliverable |
 | 5. Audit | Does it pass, and what is broken? | Filled scorecard (`assets/scorecard.md`) plus output contract |
 
-Keep working copies in a system temp directory (`/tmp/ras-*` on Unix, `%TEMP%\ras-*` on Windows), delete them before finishing, never overwrite the templates, and leave no scratch files in the project root.
+Keep working copies (Brief, Evidence table, Scorecard) in a system temp directory (`/tmp/ras-*` on Unix, `%TEMP%\ras-*` on Windows), delete them before finishing, never overwrite the templates, and leave no scratch files in the project root. Present only the deliverable and the compact 4-line output contract to the user unless the full audit trail is requested.
 
-Load references only when their phase starts; the map is at the end.
+**Batch loading:** To avoid sequential round-trip latency and prompt dilution, load only what the active task needs in one parallel batch when Phase 2 starts (`references/research.md`, `references/verification.md`, and the single matching `references/domains/*.md`). Load `references/anti-slop.md` in Phase 4, and `references/iteration.md` only if Phase 5 fails.
 
 ## 3. Phase 1 - Scope
 
@@ -77,23 +78,23 @@ Non-negotiables:
 
 ## 5. Phase 3 - Verify
 
-Read `references/verification.md`. Verify by claim type, not by vibe:
+Read `references/verification.md`. Run deterministic checks first wherever tools exist (tests, linters, compilers, HTTP/DOI resolution, script math checks), then verify by claim type:
 
 | Claim type | Check |
 |---|---|
 | Citation | Resolve the identifier; confirm title, authors, year, and support. |
-| Statistic | Trace to the dataset; record period, sample size, unit. |
-| API/code | Installed version, its docs, then run it. |
+| Statistic | Trace to the dataset; recompute derived numbers; record period, n, unit. |
+| API/code | Installed version, its docs, then execute and check failure paths. |
 | Benchmark | Conditions, baseline parity, eval harness; no unmatched cross-paper comparisons. |
 | Quote | Exact passage; no paraphrase inside quotes. |
 | File/line/figure | Open and confirm. |
 
 Anything unverifiable gets a label, not a confident sentence:
 
-- **V** verified: two independent sources, ≥1 S1/S2, locator recorded.
+- **V** verified: two independent sources, >=1 S1/S2, locator recorded—and backed by observed tool/source output, never model recall alone.
 - **S** single-source: one credible source, no corroboration.
 - **A** assumption: stated inference, not evidence.
-- **U** unverified: unconfirmed. Hard: a material U cannot ship—escalate if reachable; if unreachable and the source needs private or paywalled access, cut it or downgrade to a stated A with narrower scope. Advisory: ships only if named in the contract.
+- **U** unverified: unconfirmed. Hard: a material U cannot ship—escalate if reachable. If unreachable and a paywalled S1 source is blocked, never replace it with a weaker S3 blog: keep verified bibliographic metadata + publisher abstract (`[S1-abstract only]`, labeled **S** with scope limited in Limitations) when sufficient for a bounded claim, or cut/downgrade to a stated **A** if full-text proof is needed. Advisory: ships only if named in the contract.
 
 Defined here once; other files refer to this section.
 
@@ -113,17 +114,19 @@ Prose rules apply everywhere (`references/anti-slop.md`): behavioral tests (relo
 
 ## 7. Phase 5 - Audit
 
-Score with `assets/scorecard.md`. Five dimensions, 0-2 each.
+**Break self-verification circularity:** When the runtime supports subagents or separate sessions, delegate Phase 5 Audit (and the Hard-mode spot check) to a fresh verifier agent given only the brief, deliverable, and raw sources—never the builder's notes. In single-agent runtimes, run deterministic checks first and re-read raw sources/command outputs fresh rather than grading from memory or earlier notes.
 
-| Dimension | 0 | 1 | 2 |
-|---|---|---|---|
-| Accuracy | Wrong or unsupported material claim | Mostly correct; one weak claim | All material claims verified or labeled/disclosed |
-| Completeness | Stated requirement missing | All met; depth uneven | All met; excluded adjacent needs stated |
-| Domain craft | Below module minimum | Format met; substance missed | Craft minimum met, with evidence |
-| Structure | Argument unreadable | Followable; weak transitions | Every section advances argument; transitions explain sequence |
-| Traceability | Claims unchecked | Some sources; inconsistent | Every material claim traceable |
+Score with `assets/scorecard.md`. Five dimensions, 0-3 each:
 
-Gate: no dimension scores 0, and total is at least 8/10.
+| Dimension | 0 (Broken) | 1 (Weak / Partial) | 2 (Acceptable) | 3 (Strong / Verified) |
+|---|---|---|---|---|
+| Accuracy | Wrong or unsupported material claim | Major verification gaps; weak sources | Material claims mostly verified or labeled | All material claims verified (or S/A disclosed) with tool/source output |
+| Completeness | Stated requirement missing | Core met; significant depth or edge-case gaps | All stated requirements met | All met, edge cases handled, excluded needs stated |
+| Domain craft | Below module minimum | Format met; substance or failure paths weak | Meets domain craft baseline | Craft minimum exceeded with evidence |
+| Structure | Argument unreadable | Followable; weak transitions or uneven flow | Clear sequence and transitions | Every section advances argument; zero filler |
+| Traceability | Claims unchecked | Some locators; inconsistent mapping | Most material claims traceable | Every material claim mapped to locator or contract |
+
+Gate: no dimension scores `0`, total is at least `12/15`, and zero hard fails are triggered.
 
 Hard fails, independent of score. Any one blocks completion:
 
@@ -138,7 +141,7 @@ Hard fails, independent of score. Any one blocks completion:
 
 Hard mode re-verifies three material claims (numbers, citations, API behavior) with fresh tool calls—reopen the file, rerun the snippet, or refetch the source—and confirms the deliverable matches the raw source. A failure reopens the audit.
 
-On failure, run `references/iteration.md`: blockers first, re-audit, two rounds maximum. Never raise a score to close a gap; report defects that remain.
+On failure, run `references/iteration.md`: blockers first, progress-based stop rule (cap 3 rounds; stop on pass, zero net progress/oscillation, or missing access). Never raise a score to close a gap; report defects that remain.
 
 ## 8. Output contract
 
@@ -146,8 +149,8 @@ End every deliverable with four short blocks:
 
 ```
 Assumptions: what was inferred, and what would change if wrong.
-Verification: V/S/A/U summary; list A assumptions and (advisory) U items explicitly.
-Limitations: what this does not cover, and why it matters.
+Verification: V/S/A/U summary (plus deterministic checks run); list A and (advisory) U items explicitly.
+Limitations: what this does not cover, paywalled/unverified scope, and why it matters.
 Next check: the single most useful verification the reader should run.
 ```
 
@@ -157,10 +160,11 @@ Inline work: label only material claims; labeling every sentence is noise.
 
 | File | Load when |
 |---|---|
-| `references/research.md` | Phase 2, before search |
-| `references/verification.md` | Phase 3, or when a claim looks too convenient |
+| `references/research.md` | Phase 2, batched before search |
+| `references/verification.md` | Phase 2/3, batched with research |
+| `references/domains/*.md` | Phase 2/4, single matching domain |
 | `references/anti-slop.md` | Phase 4, drafting and self-edit |
-| `references/iteration.md` | Phase 5, when the gate fails |
-| `references/domains/*.md` | Phase 4, once the artifact type is known |
-| `assets/evidence-table.md` | Phase 2 output |
-| `assets/scorecard.md` | Phase 5 output |
+| `references/iteration.md` | Phase 5, only when the gate fails |
+| `assets/evidence-table.md` | Phase 2 output template (in temp) |
+| `assets/scorecard.md` | Phase 5 output template (in temp) |
+| `examples/api-migration-note.md` | Optional worked example for format calibration |
